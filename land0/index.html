@@ -180,6 +180,34 @@
             margin-top: 20px;
         }
 
+        .form-success {
+            display: none;
+            padding: 12px 20px;
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            border-radius: 8px;
+            color: #22c55e;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .form-success.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Dashboard Preview */
         .dashboard-preview {
             margin-top: 60px;
@@ -620,16 +648,18 @@
                 <h1>Stop Guessing.<br>Build What Users Already Proved They Want.</h1>
                 <p class="subheadline">Select competitor apps and get comprehensive review analysis: CSV exports, sentiment analysis, trend identification, gap discovery, and actionable insights to inform your product roadmap.</p>
                 
-                <form class="email-form" netlify netlify-honeypot="bot-field" id="email-form">
+                <form class="email-form" name="early-access-hero" netlify netlify-honeypot="bot-field" method="POST" data-netlify="true">
                     <p class="hidden">
                       <label>
-                        Don’t fill this out if you’re human: <input name="bot-field" type="text" />
+                        Don't fill this out if you're human: <input name="bot-field" type="text" />
                       </label>
                     </p>
-                    <input type="email" class="email-input" placeholder="Enter your email">
-                    <button class="btn-primary">Get Early Access</button>
+                    <input type="email" name="email" class="email-input" placeholder="Enter your email" required>
+                    <button type="submit" class="btn-primary">Get Early Access</button>
+                </form>
+                <div class="form-success" id="hero-form-success">
+                    ✓ Thanks! We'll notify you when we launch.
                 </div>
-                
                 <p class="trust-signal">✨ Join 50+ product teams building smarter</p>
             </div>
         </div>
@@ -803,14 +833,17 @@
                 <p class="subheader">We Help You Learn From It.</p>
                 
                 <div class="email-capture">
-                    <form class="email-form" netlify netlify-honeypot="bot-field">
+                    <form method="POST" class="email-form" name="early-access-cta" netlify netlify-honeypot="bot-field" data-netlify="true">
                         <p class="hidden">
                           <label>
-                            Don’t fill this out if you’re human: <input name="bot-field" type="text" />
+                            Don't fill this out if you're human: <input name="bot-field" type="text" />
                           </label>
                         </p>
-                        <input type="email" class="email-input" placeholder="Enter your email">
-                        <button class="btn-primary">Get Early Access</button>
+                        <input type="email" name="email" class="email-input" placeholder="Enter your email" required>
+                        <button type="submit" class="btn-primary">Get Early Access</button>
+                    </form>
+                    <div class="form-success" id="cta-form-success">
+                        ✓ Thanks! We'll notify you when we launch.
                     </div>
                     <p class="microcopy">Be first to know when we launch. No spam, just insights.</p>
                 </div>
@@ -859,24 +892,55 @@
     </footer> -->
 
     <script>
-        // Email validation and submission
-        document.querySelectorAll('.btn-primary').forEach(button => {
-            if (button.textContent.includes('Early Access')) {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const emailInput = this.previousElementSibling;
-                    if (emailInput && emailInput.type === 'email') {
-                        const email = emailInput.value;
-                        if (email && email.includes('@')) {
-                            // Here you would normally send the email to your backend
-                            alert('Thanks for your interest! We\'ll notify you when we launch.');
-                            emailInput.value = '';
-                        } else {
-                            alert('Please enter a valid email address.');
-                        }
+        // Handle form submission with success notification
+        document.querySelectorAll('form[netlify]').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.textContent;
+                
+                // Disable button and show loading state
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
+                
+                // Determine which success message to show
+                const formName = form.getAttribute('name');
+                const successMessage = formName === 'early-access-hero' 
+                    ? document.getElementById('hero-form-success')
+                    : document.getElementById('cta-form-success');
+                
+                // Submit to Netlify
+                fetch('/', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams(formData).toString()
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Show success message
+                        successMessage.classList.add('show');
+                        form.reset();
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                            successMessage.classList.remove('show');
+                        }, 5000);
+                    } else {
+                        alert('Something went wrong. Please try again.');
                     }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong. Please try again.');
+                })
+                .finally(() => {
+                    // Re-enable button
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalButtonText;
                 });
-            }
+            });
         });
 
         // Smooth scrolling for navigation links
