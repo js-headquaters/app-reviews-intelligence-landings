@@ -12,9 +12,9 @@
         }
 
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             --dark-gradient: linear-gradient(180deg, #0f0f23 0%, #1a1a3e 100%);
-            --accent-color: #667eea;
+            --accent-color: #6366f1;
             --text-primary: #1a202c;
             --text-secondary: #4a5568;
             --text-light: #718096;
@@ -59,6 +59,7 @@
             font-weight: bold;
             background: var(--primary-gradient);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -78,23 +79,29 @@
             color: var(--accent-color);
         }
 
+        .nav-links .btn-primary {
+            color: white !important;
+        }
+
         .btn-primary {
             background: var(--primary-gradient);
-            color: white;
+            color: white !important;
             padding: 12px 24px;
             border-radius: 8px;
             text-decoration: none;
             display: inline-block;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
             border: none;
             cursor: pointer;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
         }
 
         /* Hero Section */
@@ -112,7 +119,7 @@
             height: 200%;
             top: -100%;
             left: -50%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 1px, transparent 1px);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
             background-size: 50px 50px;
             animation: moveGrid 20s linear infinite;
         }
@@ -242,7 +249,7 @@
             height: 60px;
             background: linear-gradient(90deg, 
                 var(--accent-color) 0%, 
-                rgba(102, 126, 234, 0.3) 100%);
+                rgba(99, 102, 241, 0.3) 100%);
             border-radius: 4px;
             position: relative;
             overflow: hidden;
@@ -337,7 +344,7 @@
             height: 2px;
             background: linear-gradient(90deg, 
                 var(--accent-color) 0%, 
-                rgba(102, 126, 234, 0.3) 100%);
+                rgba(99, 102, 241, 0.3) 100%);
             z-index: 0;
         }
 
@@ -383,9 +390,9 @@
 
         .value-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 40px;
-            max-width: 1000px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -451,7 +458,7 @@
 
         .usecase-card:hover {
             border-color: var(--accent-color);
-            background: rgba(102, 126, 234, 0.05);
+            background: rgba(99, 102, 241, 0.05);
         }
 
         .usecase-card h3 {
@@ -551,6 +558,10 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
+        .hidden {
+            display: none;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero h1 {
@@ -597,7 +608,6 @@
                     <a href="#how-it-works">How it Works</a>
                     <a href="#features">Features</a>
                     <a href="#use-cases">Use Cases</a>
-                    <a href="#" class="btn-primary">Get Early Access</a>
                 </div>
             </div>
         </div>
@@ -608,9 +618,14 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Stop Guessing.<br>Build What Users Already Proved They Want.</h1>
-                <p class="subheadline">Extract feature patterns from millions of reviews across competitor apps. Get 6 months of market research in 30 minutes.</p>
+                <p class="subheadline">Select competitor apps and get comprehensive review analysis: CSV exports, sentiment analysis, trend identification, gap discovery, and actionable insights to inform your product roadmap.</p>
                 
-                <div class="email-form">
+                <form class="email-form" netlify netlify-honeypot="bot-field" id="email-form">
+                    <p class="hidden">
+                      <label>
+                        Don’t fill this out if you’re human: <input name="bot-field" type="text" />
+                      </label>
+                    </p>
                     <input type="email" class="email-input" placeholder="Enter your email">
                     <button class="btn-primary">Get Early Access</button>
                 </div>
@@ -701,17 +716,17 @@
                 <div class="step">
                     <div class="step-number">1</div>
                     <h3>Analyze</h3>
-                    <p>Select 5 competitor apps in your category</p>
+                    <p>Select competitors' apps in your category</p>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
-                    <h3>Extract</h3>
-                    <p>Our AI decodes feature patterns from millions of reviews</p>
+                    <h3>Get Your Analysis</h3>
+                    <p>Receive CSV files with all reviews, sentiment analysis, trend insights, gap opportunities, and UX patterns</p>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <h3>Build</h3>
-                    <p>Get a roadmap based on what users actually want</p>
+                    <p>Use insights to prioritize features, identify gaps, and build what users are actively requesting</p>
                 </div>
             </div>
         </div>
@@ -721,37 +736,66 @@
     <section class="value-section" id="features">
         <div class="container">
             <div class="section-header">
-                <h2>Turn Competitor Reviews Into Your Competitive Advantage</h2>
+                <h2>What You Get After Selecting Competitor Apps</h2>
+                <p style="color: var(--text-secondary); font-size: 18px; margin-top: 15px;">Comprehensive analysis and actionable insights to inform your product strategy</p>
             </div>
 
             <div class="value-grid">
                 <div class="value-card">
                     <h3>
-                        <div class="value-icon">📊</div>
-                        Pattern Recognition at Scale
+                        <div class="value-icon">📄</div>
+                        Complete Review Data Export
                     </h3>
-                    <p>See what 10,000+ users across competing apps really want - not just your app. Identify trending feature requests and common pain points across your entire market.</p>
+                    <p>Get a CSV file with all review texts from your selected competitor apps. Export, analyze, and share the raw data with your team.</p>
+                </div>
+                <div class="value-card">
+                    <h3>
+                        <div class="value-icon">😊</div>
+                        Sentiment Analysis
+                    </h3>
+                    <p>Automatically categorized reviews into positive and negative sentiment. Quickly understand what users love and what frustrates them across competitor apps.</p>
+                </div>
+                <div class="value-card">
+                    <h3>
+                        <div class="value-icon">📊</div>
+                        Trend Identification
+                    </h3>
+                    <p>Identify common themes across reviews. Discover frequently mentioned features, UI elements, and pain points that matter most to users in your category.</p>
                 </div>
                 <div class="value-card">
                     <h3>
                         <div class="value-icon">🔎</div>
-                        Gap Discovery Engine
+                        Gap Discovery
                     </h3>
-                    <p>Find the features everyone complains are missing. Build what they're begging for. Turn market gaps into your unique selling proposition.</p>
+                    <p>Find features mentioned in competitor reviews that your app currently lacks. Turn market gaps into your competitive advantage and unique selling proposition.</p>
                 </div>
                 <div class="value-card">
                     <h3>
-                        <div class="value-icon">✅</div>
-                        Feature Validation Before Code
+                        <div class="value-icon">🎯</div>
+                        Pain Point Analysis
                     </h3>
-                    <p>Validate your roadmap against real market demand. Skip the expensive mistakes. Know which features will resonate before writing a single line.</p>
+                    <p>Identify features that users complain about in competitor apps. Solving these pain points can give you a competitive edge and win over frustrated users.</p>
+                </div>
+                <div class="value-card">
+                    <h3>
+                        <div class="value-icon">💡</div>
+                        Feature Request Insights
+                    </h3>
+                    <p>Discover reviews where users are asking for new features or improvements. This can directly inform your product roadmap with validated demand.</p>
+                </div>
+                <div class="value-card">
+                    <h3>
+                        <div class="value-icon">🎨</div>
+                        UX Pattern Recognition
+                    </h3>
+                    <p>Even without direct feature mentions, reviews reveal UX insights. Understand user feedback on navigation, design, and overall ease of use patterns.</p>
                 </div>
                 <div class="value-card">
                     <h3>
                         <div class="value-icon">⚡</div>
-                        Time-to-Insight
+                        Instant Actionable Insights
                     </h3>
-                    <p>What takes 6 months of user research, delivered in 30 minutes. Get actionable insights while your competitors are still planning surveys.</p>
+                    <p>What takes 6 months of user research, delivered in 30 minutes. Get comprehensive analysis while your competitors are still planning surveys.</p>
                 </div>
             </div>
         </div>
@@ -793,7 +837,12 @@
                 <p class="subheader">We Help You Learn From It.</p>
                 
                 <div class="email-capture">
-                    <div class="email-form">
+                    <form class="email-form" netlify netlify-honeypot="bot-field">
+                        <p class="hidden">
+                          <label>
+                            Don’t fill this out if you’re human: <input name="bot-field" type="text" />
+                          </label>
+                        </p>
                         <input type="email" class="email-input" placeholder="Enter your email">
                         <button class="btn-primary">Get Early Access</button>
                     </div>
@@ -804,7 +853,7 @@
     </section>
 
     <!-- Footer -->
-    <footer>
+    <!-- <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
@@ -841,7 +890,7 @@
                 <p>&copy; 2025 App Reviews Intelligence. All rights reserved. Build smarter, not harder.</p>
             </div>
         </div>
-    </footer>
+    </footer> -->
 
     <script>
         // Email validation and submission
