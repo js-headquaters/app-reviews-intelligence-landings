@@ -662,14 +662,15 @@
                 <h1>Validate Your Product Ideas Before You Build</h1>
                 <p class="subheadline">Analyze competitor App Store reviews to understand user sentiment, discover gaps, and validate ideas. Get insights in minutes, not months.</p>
                 
-                <form class="email-form" name="early-access-hero" netlify netlify-honeypot="bot-field" data-netlify="true">
+                <form class="email-form" name="early-access-hero" netlify netlify-honeypot="bot-field">
+                    <input type="hidden" name="form-name" value="early-access-hero" />
                     <p class="hidden">
                       <label>
                         Don't fill this out if you're human: <input name="bot-field" type="text" />
                       </label>
                     </p>
                     <input type="email" name="email" class="email-input" placeholder="Enter your email" required>
-                    <button class="btn-primary">Get Early Access</button>
+                    <button type="button" class="btn-primary">Get Early Access</button>
                 </form>
                 <div class="form-success" id="hero-form-success">
                     ✓ Thanks! We'll notify you when we launch.
@@ -846,14 +847,15 @@
                 <p class="subheader">We Help You Learn From Their App Store Reviews.</p>
                 
                 <div class="email-capture">
-                    <form class="email-form" name="early-access-cta" netlify netlify-honeypot="bot-field" data-netlify="true">
+                    <form class="email-form" name="early-access-cta" netlify netlify-honeypot="bot-field">
+                        <input type="hidden" name="form-name" value="early-access-cta" />
                         <p class="hidden">
                           <label>
                             Don't fill this out if you're human: <input name="bot-field" type="text" />
                           </label>
                         </p>
                         <input type="email" name="email" class="email-input" placeholder="Enter your email" required>
-                        <button class="btn-primary">Get Early Access</button>
+                        <button type="button" class="btn-primary">Get Early Access</button>
                     </form>
                     <div class="form-success" id="cta-form-success">
                         ✓ Thanks! We'll notify you when we launch.
@@ -911,57 +913,79 @@
         }
 
         // Handle form submission with success notification
-        document.querySelectorAll('form[netlify]').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const formData = new FormData(form);
+        // Use DOMContentLoaded to ensure our handlers are attached before Netlify's script runs
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('form[netlify]').forEach(form => {
                 const submitButton = form.querySelector('button');
-                const originalButtonText = submitButton.textContent;
                 
-                // Disable button and show loading state
-                submitButton.disabled = true;
-                submitButton.textContent = 'Sending...';
-                
-                // Determine which success message to show
-                const formName = form.getAttribute('name');
-                const successMessage = formName === 'early-access-hero' 
-                    ? document.getElementById('hero-form-success')
-                    : document.getElementById('cta-form-success');
-
-                trackEvent('email_sent', {
-                    position: formName === 'early-access-hero' ? 'hero' : 'cta'
-                })
-                
-                // Submit to Netlify
-                fetch('/', {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams(formData).toString()
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Show success message
-                        successMessage.classList.add('show');
-                        form.reset();
-                        
-                        // Hide success message after 5 seconds
-                        setTimeout(() => {
-                            successMessage.classList.remove('show');
-                        }, 5000);
-                    } else {
-                        alert('Something went wrong. Please try again.');
+                // Extract submission logic into a reusable function
+                function handleFormSubmission(e) {
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Something went wrong. Please try again.');
-                })
-                .finally(() => {
-                    // Re-enable button
-                    submitButton.disabled = false;
-                    submitButton.textContent = originalButtonText;
-                });
+                    
+                    // Validate form
+                    if (!form.checkValidity()) {
+                        form.reportValidity();
+                        return false;
+                    }
+                    
+                    const formData = new FormData(form);
+                    const originalButtonText = submitButton.textContent;
+                    
+                    // Disable button and show loading state
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Sending...';
+                    
+                    // Determine which success message to show
+                    const formName = form.getAttribute('name');
+                    const successMessage = formName === 'early-access-hero' 
+                        ? document.getElementById('hero-form-success')
+                        : document.getElementById('cta-form-success');
+
+                    trackEvent('email_sent', {
+                        position: formName === 'early-access-hero' ? 'hero' : 'cta'
+                    })
+                    
+                    // Submit to Netlify
+                    fetch('/', {
+                        method: 'POST',
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        body: new URLSearchParams(formData).toString()
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Show success message
+                            successMessage.classList.add('show');
+                            form.reset();
+                            
+                            // Hide success message after 5 seconds
+                            setTimeout(() => {
+                                successMessage.classList.remove('show');
+                            }, 5000);
+                        } else {
+                            alert('Something went wrong. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Something went wrong. Please try again.');
+                    })
+                    .finally(() => {
+                        // Re-enable button
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalButtonText;
+                    });
+                    
+                    return false;
+                }
+                
+                // Handle form submit (catches Enter key presses in input fields)
+                form.addEventListener('submit', handleFormSubmission, true); // Capture phase - runs before Netlify's handler
+                
+                // Handle button clicks
+                submitButton.addEventListener('click', handleFormSubmission);
             });
         });
 
