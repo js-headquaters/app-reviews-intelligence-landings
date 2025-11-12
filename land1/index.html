@@ -662,7 +662,7 @@
                 <h1>Validate Your Product Ideas Before You Build</h1>
                 <p class="subheadline">Analyze competitor App Store reviews to understand user sentiment, discover gaps, and validate ideas. Get insights in minutes, not months.</p>
                 
-                <form class="email-form" name="early-access-hero" netlify netlify-honeypot="bot-field" method="POST" data-netlify="true" target="_blank">
+                <form class="email-form" name="early-access-hero" netlify netlify-honeypot="bot-field" data-netlify="true">
                     <p class="hidden">
                       <label>
                         Don't fill this out if you're human: <input name="bot-field" type="text" />
@@ -846,7 +846,7 @@
                 <p class="subheader">We Help You Learn From Their App Store Reviews.</p>
                 
                 <div class="email-capture">
-                    <form method="POST" class="email-form" name="early-access-cta" netlify netlify-honeypot="bot-field" data-netlify="true" target="_blank">
+                    <form class="email-form" name="early-access-cta" netlify netlify-honeypot="bot-field" data-netlify="true">
                         <p class="hidden">
                           <label>
                             Don't fill this out if you're human: <input name="bot-field" type="text" />
@@ -916,7 +916,7 @@
                 e.preventDefault();
                 
                 const formData = new FormData(form);
-                const submitButton = form.querySelector('button[type="submit"]');
+                const submitButton = form.querySelector('button');
                 const originalButtonText = submitButton.textContent;
                 
                 // Disable button and show loading state
