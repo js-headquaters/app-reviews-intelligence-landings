@@ -915,7 +915,7 @@
         // Handle form submission with success notification
         // Use DOMContentLoaded to ensure our handlers are attached before Netlify's script runs
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('form[netlify]').forEach(form => {
+            document.querySelectorAll('form').forEach(form => {
                 const submitButton = form.querySelector('button');
                 
                 // Extract submission logic into a reusable function
