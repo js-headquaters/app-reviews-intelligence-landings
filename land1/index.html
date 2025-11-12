@@ -12,6 +12,7 @@
 
     ym(105277976, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
 </script>
+<script src="https://cdn.amplitude.com/script/1ed3c391e6b485530499ac76d596307b.js"></script><script>window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));window.amplitude.init('1ed3c391e6b485530499ac76d596307b', {"fetchRemoteConfig":true,"autocapture":{"attribution":true,"fileDownloads":true,"formInteractions":true,"pageViews":true,"sessions":true,"elementInteractions":true,"networkTracking":true,"webVitals":true,"frustrationInteractions":true}});</script>
 <noscript><div><img src="https://mc.yandex.ru/watch/105277976" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
     <meta charset="UTF-8">
@@ -904,6 +905,11 @@
     </footer> -->
 
     <script>
+        function trackEvent(eventName, eventData) {
+            ym(105277976,'reachGoal', eventName, eventData);
+            amplitude.track(eventName, eventData);
+        }
+
         // Handle form submission with success notification
         document.querySelectorAll('form[netlify]').forEach(form => {
             form.addEventListener('submit', function(e) {
@@ -922,6 +928,10 @@
                 const successMessage = formName === 'early-access-hero' 
                     ? document.getElementById('hero-form-success')
                     : document.getElementById('cta-form-success');
+
+                trackEvent('email_sent', {
+                    position: formName === 'early-access-hero' ? 'hero' : 'cta'
+                })
                 
                 // Submit to Netlify
                 fetch('/', {
